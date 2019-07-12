@@ -16,4 +16,15 @@ def play_command():
     return (getenv('FEDIPLAY_PLAY_COMMAND') or
             'ffplay -v 0 -nostats -hide_banner -autoexit -nodisp {filename}')
 
+# def users_list():
+# 	'''Returns a list of users to follow. '''
+
+# 	return None
+
+def tags_list():
+	'''Returns a list of tags to follow. '''
+
+	return (getenv('FEDIPLAY_HASHTAGS')) or \
+		["fediplay", "nowplaying", "np"]
+
 load_dotenv(find_dotenv())

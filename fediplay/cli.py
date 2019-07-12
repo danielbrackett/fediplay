@@ -87,7 +87,7 @@ def login(instance):
 @click.argument('users', nargs=-1)
 @click.option('--clean-up-files', is_flag=True)
 def stream(instance, users, clean_up_files):
-    '''Stream music from your timeline.'''
+    '''Stream music from your timeline. Option to delete files'''
     if ( clean_up_files ):
         atexit.register(delete_files)
 
@@ -106,6 +106,12 @@ def delete_files():
 
 @cli.command()  
 def clean_up_files():
+    '''Remove files from you local machine. fediplay --clean-up-files'''
     delete_files()
 
+# @cli.command()
+# def next():
+
+# @cli.command()
+# def previous(): 
 

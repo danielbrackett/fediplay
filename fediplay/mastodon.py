@@ -1,10 +1,9 @@
 '''Mastodon interface.'''
 
-LISTEN_TO_HASHTAG = 'fediplay'
-
 from os import umask
 
 import click
+import fediplay.env as env
 from lxml.etree import HTML # pylint: disable=no-name-in-module
 import mastodon
 from youtube_dl.utils import DownloadError
@@ -41,11 +40,12 @@ class StreamListener(mastodon.StreamListener):
                 print('skipping status due to username filtering')
             return
 
-        tags = extract_tags(status)
+        post_tags = extract_tags(status)
+        tags_to_check = env.tags_list()
         if options['debug']:
-            print('expecting: {!r}, extracted tags: {!r}'.format(LISTEN_TO_HASHTAG, tags))
+            print('expecting: {!r}, extracted tags: {!r}'.format(tags_to_check, post_tags))
 
-        if LISTEN_TO_HASHTAG in tags:
+        if any(tag in post_tags for tag in tags_to_check):
             links = extract_links(status)
             if options['debug']:
                 print('links: {!r}'.format(links))
@@ -115,7 +115,9 @@ def normalize_username(user, instance):
     if len(parts) == 1 or parts[1] == instance:
         return parts[0]
     else:
-        return user
+        return user 
+
+#TODO normalize the hastags to accept them on the commandline. 
 
 def link_is_internal(link):
     '''Determines if a link is internal to the Mastodon instance.'''
